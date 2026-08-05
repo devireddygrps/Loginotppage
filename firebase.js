@@ -21,7 +21,7 @@ const auth = getAuth(app);
 window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
   size: "normal"
 });
-
+window.recaptchaVerifier.render () {
 window.sendOTP = async function () {
   const mobile = document.getElementById("mobile").value.trim();
 
@@ -47,6 +47,7 @@ window.sendOTP = async function () {
     console.error(error);
     alert(error.message);
   }
+}
 };
 
 window.verifyOTP = async function () {
