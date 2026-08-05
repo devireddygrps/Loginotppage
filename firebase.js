@@ -1,4 +1,4 @@
-console.log(""Firebase JS Loaded Successfully);
+console.log("Firebase JS Loaded Successfully");
 alert("firebase.js loaded");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
@@ -75,19 +75,6 @@ window.sendOTP = async function () {
 
 };
 
-  const mobile = document.getElementById("mobile").value.trim();
-
-  const phoneNumber = "+91" + mobile;
-
-
-  try {
-
-    const confirmationResult = await signInWithPhoneNumber(
-      auth,
-      phoneNumber,
-      window.recaptchaVerifier
-    );
-
     window.confirmationResult = confirmationResult;
 
     alert("OTP Sent Successfully");
@@ -102,38 +89,6 @@ window.sendOTP = async function () {
 
 
 // Send OTP
-window.sendOTP = async function () {
-  console.log("Send otp clicked");
-
-  const mobile = document.getElementById("mobile").value.trim();
-
-  const phoneNumber = "+91" + mobile;
-
-  try {
-
-    const confirmationResult = await signInWithPhoneNumber(
-      auth,
-      phoneNumber,
-      window.recaptchaVerifier
-    );
-
-    window.confirmationResult = confirmationResult;
-
-    alert("OTP Sent Successfully");
-
-    document.getElementById("mobileSection").style.display = "none";
-    document.getElementById("otpSection").style.display = "block";
-
-
-  } catch(error){
-
-    console.error(error);
-    alert(error.message);
-
-  }
-
-};
-
 
 // Verify OTP
 window.verifyOTP = async function () {
@@ -154,4 +109,4 @@ window.verifyOTP = async function () {
   }
 
 };
-document.getElementById(sendBtn").addEventListener("click",sendOTP);
+document.getElementById("sendBtn").addEventListener("click", window.sendOTP);
