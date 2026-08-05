@@ -7,12 +7,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAqhxdr_vaqwGup-LXmefwQFxMJErawlvw",
+  apiKey: "AIzaSyAqhxdr_vaqwGup-lXmefwQFxMJErawlvw",
   authDomain: "restaurant-qr-ordering-fdf9b.firebaseapp.com",
   projectId: "restaurant-qr-ordering-fdf9b",
   storageBucket: "restaurant-qr-ordering-fdf9b.firebasestorage.app",
   messagingSenderId: "907571024375",
-  appId: "1:907571024375:web:796894f82f2cae4d7b9ef2"
+  appId: "1:907571024375:web:796894f82f2cae4d7b9ef2",
+  measurementId: "G-G3Q89BDFF9"
 };
 
 const app = initializeApp(firebaseConfig);
