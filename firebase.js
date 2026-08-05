@@ -6,6 +6,7 @@ import {
   signInWithPhoneNumber
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyAqhxdr_vaqwGup-lXmefwQFxMJErawlvw",
   authDomain: "restaurant-qr-ordering-fdf9b.firebaseapp.com",
@@ -15,50 +16,74 @@ const firebaseConfig = {
   appId: "1:907571024375:web:796894f82f2cae4d7b9ef2"
 };
 
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-  size: "normal"
-});
-window.recaptchaVerifier.render () {
+
+// Create reCAPTCHA
+window.recaptchaVerifier = new RecaptchaVerifier(
+  auth,
+  "recaptcha-container",
+  {
+    size: "normal"
+  }
+);
+
+
+// Render reCAPTCHA
+window.recaptchaVerifier.render();
+
+
+// Send OTP
 window.sendOTP = async function () {
+
   const mobile = document.getElementById("mobile").value.trim();
 
   const phoneNumber = "+91" + mobile;
 
-  const appVerifier = window.recaptchaVerifier;
-
   try {
+
     const confirmationResult = await signInWithPhoneNumber(
       auth,
       phoneNumber,
-      appVerifier
+      window.recaptchaVerifier
     );
 
     window.confirmationResult = confirmationResult;
 
-    alert("OTP Sent!");
+    alert("OTP Sent Successfully");
 
     document.getElementById("mobileSection").style.display = "none";
     document.getElementById("otpSection").style.display = "block";
 
-  } catch (error) {
+
+  } catch(error){
+
     console.error(error);
     alert(error.message);
+
   }
-}
+
 };
 
+
+// Verify OTP
 window.verifyOTP = async function () {
-  const code = document.getElementById("otp").value;
+
+  const code = document.getElementById("otp").value.trim();
 
   try {
+
     await window.confirmationResult.confirm(code);
 
     alert("Login Successful");
 
-  } catch (error) {
+  } catch(error){
+
+    console.error(error);
     alert("Wrong OTP");
+
   }
+
 };
