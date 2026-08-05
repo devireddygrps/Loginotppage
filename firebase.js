@@ -10,7 +10,7 @@ import {
 
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyAqhxdr_vaqwGup-lXmefwQFxMJErawlvw",
   authDomain: "restaurant-qr-ordering-fdf9b.firebaseapp.com",
   projectId: "restaurant-qr-ordering-fdf9b",
   storageBucket: "restaurant-qr-ordering-fdf9b.firebasestorage.app",
