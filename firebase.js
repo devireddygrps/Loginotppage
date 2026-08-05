@@ -20,8 +20,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Create reCAPTCHA
-window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-  size: "normal"
+window.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", {
+  size: "normal",
+  callback: () =>{
+	  console.log("reCAPTCHA solved");
+  }
+},
+auth
 });
 
 // Send OTP
