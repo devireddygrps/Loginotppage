@@ -97,7 +97,6 @@ window.sendOTP = async function () {
     console.log(error);
     alert(error.message);
 
-  }
 
 };
 
