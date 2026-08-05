@@ -102,6 +102,7 @@ window.sendOTP = async function () {
 
 // Send OTP
 window.sendOTP = async function () {
+  console.log("Send otp clicked");
 
   const mobile = document.getElementById("mobile").value.trim();
 
@@ -152,3 +153,4 @@ window.verifyOTP = async function () {
   }
 
 };
+document.getElementById(sendBtn").addEventListener("click",sendOTP);
