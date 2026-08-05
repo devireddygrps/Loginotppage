@@ -22,17 +22,47 @@ const auth = getAuth(app);
 
 
 // Create reCAPTCHA
-window.recaptchaVerifier = new RecaptchaVerifier(
-  auth,
-  "recaptcha-container",
-  {
-    size: "normal"
+window.sendOTP = async function () {
+
+  if (!window.recaptchaVerifier) {
+
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "normal"
+      }
+    );
+
+    await window.recaptchaVerifier.render();
   }
-);
 
 
-// Render reCAPTCHA
-window.recaptchaVerifier.render();
+  const mobile = document.getElementById("mobile").value.trim();
+
+  const phoneNumber = "+91" + mobile;
+
+
+  try {
+
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      window.recaptchaVerifier
+    );
+
+    window.confirmationResult = confirmationResult;
+
+    alert("OTP Sent Successfully");
+
+  } catch(error) {
+
+    console.log(error);
+    alert(error.message);
+
+  }
+
+};
 
 
 // Send OTP
