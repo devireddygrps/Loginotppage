@@ -30,7 +30,7 @@ window.sendOTP = async function () {
       auth,
       "recaptcha-container",
       {
-        size: "normal"
+        size: "invisible"
       }
     );
 
