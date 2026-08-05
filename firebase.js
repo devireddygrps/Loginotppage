@@ -78,7 +78,8 @@ window.sendOTP = async function () {
     window.confirmationResult = confirmationResult;
 
     alert("OTP Sent Successfully");
-
+document.getElementById("mobileSection").style.display = "none";
+document.getElementById("otpSection").style.display = "block";
   } catch(error) {
 
     console.log(error);
