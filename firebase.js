@@ -1,10 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
 import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAqhxdr_vaqwGup-lXmefwQFxMJErawlvw",
@@ -12,44 +12,33 @@ const firebaseConfig = {
   projectId: "restaurant-qr-ordering-fdf9b",
   storageBucket: "restaurant-qr-ordering-fdf9b.firebasestorage.app",
   messagingSenderId: "907571024375",
-  appId: "1:907571024375:web:796894f82f2cae4d7b9ef2",
-  measurementId: "G-G3Q89BDFF9"
+  appId: "1:907571024375:web:796894f82f2cae4d7b9ef2"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Create reCAPTCHA
-window.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", {
-  size: "normal",
-  callback: () =>{
-	  console.log("reCAPTCHA solved");
-  }
-},
-auth
+window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+  size: "normal"
 });
 
-// Send OTP
 window.sendOTP = async function () {
   const mobile = document.getElementById("mobile").value.trim();
 
-  if (mobile.length !== 10) {
-    alert("Please enter a valid 10-digit mobile number.");
-    return;
-  }
-
   const phoneNumber = "+91" + mobile;
+
+  const appVerifier = window.recaptchaVerifier;
 
   try {
     const confirmationResult = await signInWithPhoneNumber(
       auth,
       phoneNumber,
-      window.recaptchaVerifier
+      appVerifier
     );
 
     window.confirmationResult = confirmationResult;
 
-    alert("OTP Sent Successfully");
+    alert("OTP Sent!");
 
     document.getElementById("mobileSection").style.display = "none";
     document.getElementById("otpSection").style.display = "block";
@@ -60,18 +49,15 @@ window.sendOTP = async function () {
   }
 };
 
-// Verify OTP
 window.verifyOTP = async function () {
-  const otp = document.getElementById("otp").value;
+  const code = document.getElementById("otp").value;
 
   try {
-    await window.confirmationResult.confirm(otp);
+    await window.confirmationResult.confirm(code);
 
     alert("Login Successful");
 
-    window.location.href = "index.html";
-
   } catch (error) {
-    alert("Invalid OTP");
+    alert("Wrong OTP");
   }
 };
