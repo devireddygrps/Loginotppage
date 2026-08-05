@@ -24,19 +24,54 @@ const auth = getAuth(app);
 // Create reCAPTCHA
 window.sendOTP = async function () {
 
-  if (!window.recaptchaVerifier) {
+  try {
 
-    window.recaptchaVerifier = new RecaptchaVerifier(
+    if (!window.recaptchaVerifier) {
+
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "normal"
+        }
+      );
+
+      await window.recaptchaVerifier.render();
+
+    }
+
+
+    const mobile = document.getElementById("mobile").value.trim();
+
+    if (mobile.length !== 10) {
+      alert("Enter valid 10 digit mobile number");
+      return;
+    }
+
+
+    const phoneNumber = "+91" + mobile;
+
+
+    const confirmationResult = await signInWithPhoneNumber(
       auth,
-      "recaptcha-container",
-      {
-        size: "invisible"
-      }
+      phoneNumber,
+      window.recaptchaVerifier
     );
 
-    await window.recaptchaVerifier.render();
+
+    window.confirmationResult = confirmationResult;
+
+    alert("OTP Sent Successfully");
+
+
+  } catch(error) {
+
+    console.log(error);
+    alert(error.message);
+
   }
 
+};
 
   const mobile = document.getElementById("mobile").value.trim();
 
