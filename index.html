@@ -1,109 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Restaurant Login</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
-body{
-    background:#f5f5f5;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.container{
-    width:350px;
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.2);
-    text-align:center;
-}
-
-h2{
-    color:#ff5722;
-    margin-bottom:10px;
-}
-
-p{
-    color:gray;
-    margin-bottom:25px;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-}
-
-button{
-    width:100%;
-    padding:12px;
-    background:#ff5722;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#e64a19;
-}
-
-#otpSection{
-    display:none;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan & Dine - QR Menu</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans">
 
-<div class="container">
+    <!-- APP CONTAINER -->
+    <div id="app" class="max-w-md mx-auto min-h-screen bg-white shadow-lg relative flex flex-col">
 
-<h2>Restaurant Login</h2>
+        <!-- ================= VIEW 1: LOGIN / OTP ================= -->
+        <div id="login-view" class="p-6 flex flex-col justify-center min-h-screen">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-orange-600">Scan & Dine</h1>
+                <p class="text-gray-500 text-sm mt-1">Enter your phone number to view the menu</p>
+            </div>
 
-<p>Login using your mobile number</p>
+            <!-- Phone Input Form -->
+            <div id="phone-step" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Phone Number</label>
+                    <input type="tel" id="phone-input" placeholder="Enter 10-digit mobile number" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                </div>
+                <button onclick="sendOTP()" class="w-full bg-orange-600 text-white font-semibold py-3 rounded-lg hover:bg-orange-700 transition">Get OTP</button>
+            </div>
 
-<div id="mobileSection">
+            <!-- OTP Verification Form (Hidden Initially) -->
+            <div id="otp-step" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Enter 4-Digit OTP</label>
+                    <input type="text" id="otp-input" maxlength="4" placeholder="1234" class="w-full px-4 py-3 text-center tracking-widest text-xl rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                </div>
+                <button onclick="verifyOTP()" class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition">Verify & Open Menu</button>
+            </div>
+        </div>
 
-    <input type="tel" id="mobile" placeholder="Enter Mobile Number">
+        <!-- ================= VIEW 2: RESTAURANT MENU ================= -->
+        <div id="menu-view" class="hidden flex-col flex-grow pb-24">
+            
+            <!-- Header -->
+            <header class="bg-orange-600 text-white p-4 sticky top-0 z-10 flex justify-between items-center shadow">
+                <div>
+                    <h2 class="font-bold text-lg">Spice Junction</h2>
+                    <p class="text-xs text-orange-100">Table #5</p>
+                </div>
+                <span class="bg-orange-700 text-xs px-2.5 py-1 rounded-full font-medium">Dine-In</span>
+            </header>
 
-    <div id="recaptcha-container"></div>
+            <!-- Promotional Banner Carousel / Box -->
+            <div class="p-4 bg-orange-50">
+                <div class="bg-gradient-to-r from-orange-500 to-amber-500 text-white p-4 rounded-xl shadow-sm">
+                    <span class="bg-white/20 text-xs px-2 py-0.5 rounded font-bold uppercase">Special Offer</span>
+                    <h3 class="text-lg font-bold mt-1">Get 20% OFF on Starters!</h3>
+                    <p class="text-xs text-orange-100">Use code: <span class="font-mono underline">YUMMY20</span> at checkout</p>
+                </div>
+            </div>
 
-    <button id="sendBtn">
-        Send OTP
-    </button>
+            <!-- Menu Categories & Items -->
+            <div class="p-4 space-y-6 flex-grow">
+                <h3 class="font-bold text-gray-700 border-b pb-2">Popular Dishes</h3>
 
-</div>
+                <!-- Item Card 1 -->
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="flex-1 pr-3">
+                        <h4 class="font-bold text-gray-900">Paneer Tikka Sizzler</h4>
+                        <p class="text-xs text-gray-500 mt-0.5">Spicy grilled cottage cheese served with veggies.</p>
+                        <span class="text-sm font-semibold text-orange-600 mt-2 block">$12.99</span>
+                    </div>
+                    <button onclick="openCustomization('Paneer Tikka Sizzler', 12.99)" class="bg-orange-100 text-orange-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-200 transition">Add +</button>
+                </div>
 
-<div id="otpSection">
+                <!-- Item Card 2 -->
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="flex-1 pr-3">
+                        <h4 class="font-bold text-gray-900">Chicken Alfredo Pasta</h4>
+                        <p class="text-xs text-gray-500 mt-0.5">Creamy garlic pasta with grilled chicken slices.</p>
+                        <span class="text-sm font-semibold text-orange-600 mt-2 block">$15.49</span>
+                    </div>
+                    <button onclick="openCustomization('Chicken Alfredo Pasta', 15.49)" class="bg-orange-100 text-orange-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-200 transition">Add +</button>
+                </div>
+            </div>
 
-<input type="text"
-id="otp"
-placeholder="Enter OTP">
+            <!-- Sticky Floating Cart Bar -->
+            <div id="cart-bar" class="hidden fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-gray-900 text-white p-4 flex justify-between items-center shadow-lg">
+                <div>
+                    <span id="cart-count" class="font-bold text-sm">0 items</span>
+                    <p id="cart-total" class="text-xs text-gray-400">$0.00</p>
+                </div>
+                <button onclick="openCheckout()" class="bg-orange-600 px-6 py-2 rounded-lg font-bold text-sm hover:bg-orange-700 transition">View Cart & Pay</button>
+            </div>
+        </div>
 
-<button onclick="verifyOTP()">
-Verify OTP
-</button>
+        <!-- ================= MODAL: CUSTOMIZATION & NOTES ================= -->
+        <div id="customization-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end justify-center">
+            <div class="bg-white w-full max-w-md rounded-t-2xl p-6 space-y-4 animate-slide-up">
+                <div class="flex justify-between items-center">
+                    <h3 id="modal-item-name" class="font-bold text-lg text-gray-900">Item Name</h3>
+                    <button onclick="closeModal()" class="text-gray-400 font-bold text-xl">&times;</button>
+                </div>
+                <p id="modal-item-price" class="text-orange-600 font-semibold">$0.00</p>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Special Cooking Note</label>
+                    <textarea id="item-note" placeholder="E.g., Less spicy, no onions, extra dressing..." class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" rows="2"></textarea>
+                </div>
 
-</div>
+                <button onclick="addToCartWithNote()" class="w-full bg-orange-600 text-white py-3 rounded-lg font-bold hover:bg-orange-700 transition">Add to Order</button>
+            </div>
+        </div>
 
-</div>
-<script type="module" src="./firebase.js">
-</script>
+        <!-- ================= VIEW 3: CHECKOUT & QR PAYMENT ================= -->
+        <div id="checkout-view" class="hidden flex-col flex-grow p-4 bg-gray-50">
+            <div class="flex items-center mb-4">
+                <button onclick="backToMenu()" class="text-sm font-semibold text-gray-600">&larr; Back to Menu</button>
+                <h2 class="flex-grow text-center font-bold text-lg">Order Summary</h2>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="checkout-items-list" class="space-y-3 mb-6 flex-grow">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Bill Summary -->
+            <div class="bg-white p-4 rounded-xl shadow-sm space-y-2 mb-6 border border-gray-100">
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>Subtotal</span>
+                    <span id="subtotal-amount">$0.00</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>Tax (5%)</span>
+                    <span id="tax-amount">$0.00</span>
+                </div>
+                <div class="border-t pt-2 flex justify-between font-bold text-gray-900">
+                    <span>Total Amount</span>
+                    <span id="final-total">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Payment Button -->
+            <button onclick="triggerQRPayment()" class="w-full bg-green-600 text-white font-bold py-3.5 rounded-xl shadow hover:bg-green-700 transition">Pay via UPI / QR Code</button>
+        </div>
+
+        <!-- ================= MODAL: QR PAYMENT SIMULATION ================= -->
+        <div id="payment-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-xs rounded-2xl p-6 text-center space-y-4">
+                <h3 class="font-bold text-lg text-gray-900">Scan QR to Pay</h3>
+                <p class="text-xs text-gray-500">Scan using any UPI app (Google Pay, PhonePe, Paytm)</p>
+                
+                <!-- Mock QR Code Graphic -->
+                <div class="bg-gray-100 p-4 rounded-xl inline-block border border-gray-200">
+                    <img src="=SpiceJunction" alt="Payment QR" class="mx-auto w-36 h-36">
+                </div>
+
+                <p id="payment-amount-display" class="font-bold text-orange-600 text-lg">$0.00</p>
+
+                <button onclick="simulatePaymentSuccess()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition">Simulate Payment Success</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let cart = [];
+        let currentSelectedItem = {};
+
+        function sendOTP() {
+            const phone = document.getElementById('phone-input').value;
+            if(phone.length < 10) {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+            document.getElementById('phone-step').classList.add('hidden');
+            document.getElementById('otp-step').classList.remove('hidden');
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otp-input').value;
+            if(otp.length !== 4) {
+                alert('Please enter a 4-digit OTP.');
+                return;
+            }
+            // Transition from Login view to Menu view
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('menu-view').classList.remove('hidden');
+            document.getElementById('menu-view').classList.add('flex');
+        }
+
+        function openCustomization(name, price) {
+            currentSelectedItem = { name, price };
+            document.getElementById('modal-item-name').innerText = name;
+            document.getElementById('modal-item-price').innerText = `$${price.toFixed(2)}`;
+            document.getElementById('item-note').value = '';
+            document.getElementById('customization-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('customization-modal').classList.add('hidden');
+        }
+
+        function addToCartWithNote() {
+            const note = document.getElementById('item-note').value;
+            cart.push({
+                name: currentSelectedItem.name,
+                price: currentSelectedItem.price,
+                note: note
+            });
+            closeModal();
+            updateCartBar();
+        }
+
+        function updateCartBar() {
+            const cartBar = document.getElementById('cart-bar');
+            if(cart.length > 0) {
+                cartBar.classList.remove('hidden');
+                document.getElementById('cart-count').innerText = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+            } else {
+                cartBar.classList.add('hidden');
+            }
+        }
+
+        function openCheckout() {
+            document.getElementById('menu-view').classList.add('hidden');
+            document.getElementById('cart-bar').classList.add('hidden');
+            document.getElementById('checkout-view').classList.remove('hidden');
+            document.getElementById('checkout-view').classList.add('flex');
+
+            const listContainer = document.getElementById('checkout-items-list');
+            listContainer.innerHTML = '';
+
+            cart.forEach(item => {
+                listContainer.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900">${item.name}</h4>
+                            ${item.note ? `<p class="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded mt-1 inline-block">Note: ${item.note}</p>` : ''}
+                        </div>
+                        <span class="font-semibold text-sm text-gray-700">$${item.price.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+
+            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const tax = subtotal * 0.05;
+            const final = subtotal + tax;
+
+            document.getElementById('subtotal-amount').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax-amount').innerText = `$${tax.toFixed(2)}`;
+            document.getElementById('final-total').innerText = `$${final.toFixed(2)}`;
+        }
+
+        function backToMenu() {
+            document.getElementById('checkout-view').classList.add('hidden');
+            document.getElementById('menu-view').classList.remove('hidden');
+            updateCartBar();
+        }
+
+        function triggerQRPayment() {
+            const finalTotal = document.getElementById('final-total').innerText;
+            document.getElementById('payment-amount-display').innerText = finalTotal;
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+
+        function simulatePaymentSuccess() {
+            alert('Payment Successful! Order has been sent to the kitchen.');
+            document.getElementById('payment-modal').classList.add('hidden');
+            cart = [];
+            backToMenu();
+            updateCartBar();
+        }
+    </script>
 </body>
 </html>
